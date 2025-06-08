@@ -8,9 +8,11 @@ import (
 
 	"github.com/daniil4142/url-shortener/internal/config"
 	"github.com/daniil4142/url-shortener/internal/http-server/handlers/redirect"
+	"github.com/daniil4142/url-shortener/internal/http-server/handlers/url/save"
 	mwLogger "github.com/daniil4142/url-shortener/internal/http-server/middleware/logger"
-	slog "github.com/daniil4142/url-shortener/internal/lib/logger/sl"
+	"github.com/daniil4142/url-shortener/internal/lib/logger/sl"
 	"github.com/daniil4142/url-shortener/internal/storage/sqlite"
+	"github.com/joho/godotenv"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -18,6 +20,8 @@ import (
 )
 
 func main() {
+	godotenv.Load()
+
 	cfg := config.MustLoad()
 
 	log := setupLogger(cfg.Env)
@@ -39,16 +43,8 @@ func main() {
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
 
-	router.Route("/url", func(r chi.Router) {
-		r.Use(middleware.BasicAuth("url-shortener", map[string]string{
-			cfg.HTTPServer.User: cfg.HTTPServer.Password,
-		}))
-
-		r.Post("/", save.New(log, storage))
-		// TODO: add DELETE /url/{id}
-	})
-
 	router.Get("/{alias}", redirect.New(log, storage))
+	router.Post("/url", save.New(log, storage))
 
 	log.Info("starting server", slog.String("address", cfg.Address))
 

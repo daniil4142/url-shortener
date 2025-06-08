@@ -4,14 +4,14 @@ import (
 	"errors"
 	"net/http"
 
+	resp "github.com/daniil4142/url-shortener/internal/lib/api/response"
+	"github.com/daniil4142/url-shortener/internal/lib/logger/sl"
+	"github.com/daniil4142/url-shortener/internal/storage"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"golang.org/x/exp/slog"
-
-	resp "url-shortener/internal/lib/api/response"
-	"url-shortener/internal/lib/logger/sl"
-	"url-shortener/internal/storage"
 )
 
 // URLGetter is an interface for getting url by alias.

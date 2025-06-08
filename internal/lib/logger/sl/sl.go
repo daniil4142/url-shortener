@@ -1,4 +1,4 @@
-package slog
+package sl
 
 import (
 	"golang.org/x/exp/slog"
