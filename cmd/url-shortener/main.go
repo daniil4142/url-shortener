@@ -9,13 +9,12 @@ import (
 	"github.com/daniil4142/url-shortener/internal/config"
 	"github.com/daniil4142/url-shortener/internal/http-server/handlers/redirect"
 	"github.com/daniil4142/url-shortener/internal/http-server/handlers/url/save"
-	mwLogger "github.com/daniil4142/url-shortener/internal/http-server/middleware/logger"
 	"github.com/daniil4142/url-shortener/internal/lib/logger/sl"
 	"github.com/daniil4142/url-shortener/internal/storage/sqlite"
 	"github.com/joho/godotenv"
 
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"golang.org/x/exp/slog"
 )
 
@@ -38,10 +37,9 @@ func main() {
 	router := chi.NewRouter()
 
 	router.Use(middleware.RequestID)
+	// router.Use(mwLogger.New(log))
 	router.Use(middleware.Logger)
-	router.Use(mwLogger.New(log))
 	router.Use(middleware.Recoverer)
-	router.Use(middleware.URLFormat)
 
 	router.Get("/{alias}", redirect.New(log, storage))
 	router.Post("/url", save.New(log, storage))

@@ -26,7 +26,6 @@ require (
 
 require (
 	github.com/ajg/form v1.5.1 // indirect
-	github.com/go-chi/chi v1.5.5
 	github.com/go-playground/validator/v10 v10.26.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 )

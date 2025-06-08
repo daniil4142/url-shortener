@@ -28,6 +28,7 @@ func New(log *slog.Logger, urlGetter URLGetter) http.HandlerFunc {
 		log := log.With(
 			slog.String("op", op),
 			slog.String("request_id", middleware.GetReqID(r.Context())),
+			slog.Any("req", r),
 		)
 
 		alias := chi.URLParam(r, "alias")
